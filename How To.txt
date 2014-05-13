@@ -1,0 +1,6 @@
+Model initialization:
+
+./initModel.py my_model.pickle my_edge_1.pickle my_edge_2.pickle my_edge_3.pickle ...
+
+Model Evaluation:
+./evalModel.py saida.pickle my_model.pickle ~/git/hypergraph_playlist/playlists/ -s -u 
