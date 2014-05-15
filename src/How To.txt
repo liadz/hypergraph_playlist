@@ -1,0 +1,9 @@
+Model initialization:
+
+General case example: ./initModel.py my_model.pickle my_edge_1.pickle my_edge_2.pickle my_edge_3.pickle ...
+My current args: my_model.pickle edge_era.pickle edge_tags.pickle edge_uniform.pickle 
+
+Model Evaluation:
+General case example: ./evalModel.py saida.pickle my_model.pickle ~/git/hypergraph_playlist/playlists/ -s -u
+My current args:
+	Windows: saida.pickle my_model.pickle D:\git\hypergraph_playlist\playlists -s -u 
