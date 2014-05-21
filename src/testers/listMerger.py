@@ -20,8 +20,14 @@ all_songs = set()
 for pl in all_playlists:
     all_songs.update(pl)
 
+#got to turn this set into a list and then put it in a dic
+
+all_songs_list = list(all_songs)
+song_dic = {}
+song_dic['songs'] = all_songs_list    
+
 print len(all_playlists)
 print len(all_songs)
 
-pickle.dump(all_songs, open("all_my_songs.pickle", "wb"))
+pickle.dump(song_dic, open("all_my_songs.pickle", "wb"))
 
