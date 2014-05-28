@@ -63,7 +63,7 @@ def constructModel(params):
 if __name__ == '__main__':
     params  = processArguments()
     model   = constructModel(params)
-    with open(params['outfile'][0], 'w') as f:
+    with open(params['outfile'][0], 'wb') as f:
         pickle.dump({'G': model}, f)
         pass
     pass

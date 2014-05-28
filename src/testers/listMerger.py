@@ -6,8 +6,11 @@ Created on 14/05/2014
 
 import cPickle as pickle
 
-TRAIN_FILE = "D:/git/hypergraph_playlist/playlists/ALL_train.pickle"
-TEST_FILE = "D:/git/hypergraph_playlist/playlists/ALL_test.pickle"
+#TRAIN_FILE = "D:/git/hypergraph_playlist/playlists/ALL_train.pickle"
+#TEST_FILE = "D:/git/hypergraph_playlist/playlists/ALL_test.pickle"
+
+TRAIN_FILE = "/home/vitor/git/hypergraph_playlist/playlists/ALL_train.pickle"
+TEST_FILE = "/home/vitor/git/hypergraph_playlist/playlists/ALL_test.pickle"
 
 split_train = pickle.load(open(TRAIN_FILE))
 split_test = pickle.load(open(TEST_FILE))
@@ -28,6 +31,7 @@ song_dic['songs'] = all_songs_list
 
 print len(all_playlists)
 print len(all_songs)
+print len(song_dic['songs'])
 
 pickle.dump(song_dic, open("all_my_songs.pickle", "wb"))
 

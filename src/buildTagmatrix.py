@@ -23,12 +23,15 @@ def getTrackIds(song_ids, basedir):
 
     track_ids = {}
 
+    #count = 0
     with open('%s/AdditionalFiles/unique_tracks.txt' % basedir, 'r') as f:
         for line in f:
             (t, s, artist, title) = line.strip().split('<SEP>', 4)
             if s in song_ids:
                 track_ids[s] = t
             pass
+            #print count
+            #count += 1
 
     return track_ids
 
