@@ -162,7 +162,7 @@ def evaluateModel(params):
 if __name__ == '__main__':
     params  = processArguments()
     results = evaluateModel(params)
-    with open(params['results_out'][0], 'w') as f:
+    with open(params['results_out'][0], 'wb') as f:
         pickle.dump(results, f)
         pass
     pass
