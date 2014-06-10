@@ -24,7 +24,6 @@ def samplePlaylist(G, N, songs):
     (playlist, tagindex) = G.sample(N)
     
     for (song_id, tag) in zip(playlist, tagindex):
-        print "foiba"
         print '[%30s] %s' % (G.getEdgeLabel(tag), songs[song_id])
     pass
 
