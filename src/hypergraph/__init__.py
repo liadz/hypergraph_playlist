@@ -29,6 +29,8 @@ class Hypergraph(object):
         '''
             edgeMap is a dict: vertex -> collection of edge labels
         '''
+        
+        #updates __weights list.
         self.__weights = list(self.__weights)
         for v in edgeMap:
             if v not in self.__vertex_to_edge:
