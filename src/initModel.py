@@ -46,6 +46,8 @@ def processArguments():
 def constructModel(params):
     
     G = hypergraph.Hypergraph()
+    
+    #done for each feature passed as a input argument
     for infile in params['infiles']:
         print 'Loading ', infile
         with open(infile, 'r') as f:

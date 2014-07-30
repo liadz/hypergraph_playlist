@@ -32,6 +32,11 @@ class Hypergraph(object):
         
         #updates __weights list.
         self.__weights = list(self.__weights)
+        '''
+            it gets each vertex here for the given feature
+            each feature can put a song in many edges, just remember how epoch is calculated
+            or the many tags a song can have
+        '''
         for v in edgeMap:
             if v not in self.__vertex_to_edge:
                 # if we don't already know about this vertex, construct an edge set for it
@@ -43,17 +48,19 @@ class Hypergraph(object):
                     # Add the new edge to the list
                     self.__edge_to_label.append(e)
 
-                    # Initialize the edge set
+                    # Initialize the edge set for the vertex
                     self.__edge_set.append(set())
 
                     # Construct it's numerical mapping
                     self.__label_to_edge[e] = len(self.__edge_to_label) - 1
 
-                    # Initialize the edge weight
+                    # Initialize the edge weight regarding that one vertex
                     self.__weights.append(1.0)
                     pass
+                #gets 
                 edgeNum = self.__label_to_edge[e]
                 self.__vertex_to_edge[v].add(edgeNum)
+                #includes the vertex v as a member of the current edge
                 self.__edge_set[edgeNum].add(v)
                 pass
             pass
