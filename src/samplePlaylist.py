@@ -17,6 +17,10 @@ import hypergraph
 def printPlaylist(P, songs):
     for (i, p) in enumerate(P):
         print '%2d. %s' % (i, songs[p])
+        print "something aasfafaf"
+        print "something aasfafaf"
+        print "something aasfafaf"
+        print "suba"
     pass
 
 
@@ -29,7 +33,8 @@ def samplePlaylist(G, N, songs):
 
 if __name__ == '__main__':
     with open(sys.argv[1], 'r') as f:
-        G = pickle.load(f)['G']
+        jsd = pickle.load(f)
+        G = jsd['G']
     with open(sys.argv[2], 'r') as f:
         songs = pickle.load(f)
     N = int(sys.argv[3])

@@ -9,6 +9,7 @@ Usage:
 ./evalModel.py results_OUT.pickle model_IN.pickle /path/to/playlist/directory [-s] [-u]
 
 '''
+#hauhuahuahuhua
 
 import argparse
 import sys
@@ -114,6 +115,7 @@ def evaluateModel(params):
 
     # 1: load the model
     print 'Loading model...'
+    #G is the Hypergraph
     G = loadModel(params)
 
     # Reset edge weights
