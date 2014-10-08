@@ -11,6 +11,26 @@ import pprint
 if __name__ == "__main__" :
     with open('saida.pickle', 'r') as f:
         output = pickle.load(f)
-        f = open('picPrint.txt', 'w')
-        pprint.pprint(output, f, 1)
         pass
+
+    #fil = open('picPrint.txt', 'w')
+    #pprint.pprint(output, fil, 1)
+
+    trainedWeights = output['weights']['ALL'][0]
+    #pprint.pprint(trainedWeights)
+
+    with open('my_model.pickle', 'r') as mm:
+        graph = pickle.load(mm)['G']
+        pass
+
+    graph.setWeights(trainedWeights)
+
+    pprint.pprint('toba!')
+    pprint.pprint(graph.getWeights())
+    pprint.pprint('toba!')
+
+    with open('my_trained_model.pickle', 'wb') as t:
+        pickle.dump({'G': graph}, t)
+        pass
+
+    pass
