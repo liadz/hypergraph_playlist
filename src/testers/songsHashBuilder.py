@@ -1,8 +1,8 @@
-'''
+"""
 Created on 03/06/2014
 
 @author: vitor
-'''
+"""
 
 import cPickle as pickle
 
