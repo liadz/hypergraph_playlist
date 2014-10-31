@@ -8,7 +8,7 @@ import cPickle as pickle
 import hypergraph
 import pprint
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     with open('saida.pickle', 'r') as f:
         output = pickle.load(f)
         pass
@@ -16,8 +16,8 @@ if __name__ == "__main__" :
     #fil = open('picPrint.txt', 'w')
     #pprint.pprint(output, fil, 1)
 
-    trainedWeights = output['weights']['ALL'][0]
-    #pprint.pprint(trainedWeights)
+    trainedWeights = output['weights']['Electronic Music'][0]
+    pprint.pprint(trainedWeights)
 
     with open('my_model.pickle', 'r') as mm:
         graph = pickle.load(mm)['G']

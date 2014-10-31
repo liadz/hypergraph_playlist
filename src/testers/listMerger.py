@@ -4,6 +4,9 @@ Created on 14/05/2014
 @author: Vitor
 '''
 
+#this code is kind of useless right now since the data format was not compatible with the song hash format
+#songHashBuilder.py is the code you want if you need to get a data set including all songs.
+
 import cPickle as pickle
 
 #TRAIN_FILE = "D:/git/hypergraph_playlist/playlists/ALL_train.pickle"
