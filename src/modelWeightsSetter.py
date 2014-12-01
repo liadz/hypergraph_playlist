@@ -16,7 +16,7 @@ if __name__ == "__main__":
     #fil = open('picPrint.txt', 'w')
     #pprint.pprint(output, fil, 1)
 
-    trainedWeights = output['weights']['Electronic Music'][0]
+    trainedWeights = output['weights']['Depression'][0]
     pprint.pprint(trainedWeights)
 
     with open('my_model.pickle', 'r') as mm:

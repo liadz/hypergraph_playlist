@@ -476,14 +476,17 @@ class Hypergraph(object):
         Sample a length-m playlist from the model
         '''
 
+        #Aqui comeca a magia: pegando os edges com maiores pesos para escolher a seed da playlist.
         def __categoricalSample(p):
-            return numpy.argmax(numpy.random.multinomial(1,p))
+            return numpy.argmax(numpy.random.multinomial(1, p))
 
         # Sample an intial edge set
         edges   = [__categoricalSample(self.__weights)]
 
         # Sample a song from the edge
         songs   = random.sample(self.__edge_set[edges[-1]], 1)
+
+        #segue-se pegando os edges mais importantes dentro dos alcancaveis para poder escolher a proxima musica.
 
         for i in range(m):
             x0      = self.__makeVec(songs[-1])
@@ -498,3 +501,6 @@ class Hypergraph(object):
 
         return (songs, edges)
 
+    def betaSampler(self, m=10):
+
+        pass
