@@ -503,4 +503,8 @@ class Hypergraph(object):
 
     def betaSampler(self, m=10):
 
+        pachetWeights = []
+
+
+
         pass
