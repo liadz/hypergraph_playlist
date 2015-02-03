@@ -12,6 +12,7 @@ Usage:
 
 import cPickle as pickle
 import sys
+import pprint
 import hypergraph
 
 def printPlaylist(P, songs):
@@ -26,6 +27,8 @@ def printPlaylist(P, songs):
 
 def samplePlaylist(G, N, songs):
     (playlist, tagindex) = G.sample(N)
+
+    G.unaryConstraintCreator()
     
     for (song_id, tag) in zip(playlist, tagindex):
         print '[%30s] %s' % (G.getEdgeLabel(tag), songs[song_id])

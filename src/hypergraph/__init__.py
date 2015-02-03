@@ -11,6 +11,7 @@ import scipy.optimize
 import scipy.sparse
 import numpy.random
 import re
+import pprint
 
 class Hypergraph(object):
 
@@ -507,4 +508,14 @@ class Hypergraph(object):
 
 
 
+        pass
+
+    def unaryConstraintCreator(self):
+
+        pprint.pprint(self.__edge_to_label.__len__())
+        pprint.pprint(self.__weights.__len__())
+        pprint.pprint(self.__label_to_edge.__len__())
+        pass
+
+    def binaryConstraintCreator(self):
         pass
