@@ -512,9 +512,13 @@ class Hypergraph(object):
 
     def unaryConstraintCreator(self):
 
-        pprint.pprint(self.__edge_to_label.__len__())
-        pprint.pprint(self.__weights.__len__())
-        pprint.pprint(self.__label_to_edge.__len__())
+        #consigo o nome do label
+        teste = self.__edge_to_label[45]
+        pprint.pprint(teste)
+        #consigo a probabilidade
+        pprint.pprint(self.__weights[45])
+        #consigo a posição tendo o nome
+        pprint.pprint(self.__label_to_edge[teste])
         pass
 
     def binaryConstraintCreator(self):
