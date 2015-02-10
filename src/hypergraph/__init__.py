@@ -24,6 +24,10 @@ class Hypergraph(object):
         self.__edge_size        = None
         self.__Z0               = None
         self.__Zt               = None
+
+        #My variables:
+        self.pachetWeights      = []
+
         pass
 
     def importEdge(self, edgeMap):
@@ -504,22 +508,35 @@ class Hypergraph(object):
 
     def betaSampler(self, m=10):
 
-        pachetWeights = []
-
-
 
         pass
 
-    def unaryConstraintCreator(self):
+    def pachetWeightsSetter(self, playlistLength):
+        self.pachetWeights = []
+        for i in xrange(playlistLength):
+            self.pachetWeights[i] = self.__weights
+            pass
+        pass
+
+    def generateZeroes(self, length):
+
+        return
+
+    def unaryConstraintCreator(self, edgeName, position):
 
         #consigo o nome do label
-        teste = self.__edge_to_label[45]
-        pprint.pprint(teste)
+        #teste = self.__edge_to_label[45]
+        #pprint.pprint(teste)
         #consigo a probabilidade
-        pprint.pprint(self.__weights[45])
-        #consigo a posição tendo o nome
-        pprint.pprint(self.__label_to_edge[teste])
+        #pprint.pprint(self.__weights[45])
+        #consigo a posicao tendo o nome
+        #pprint.pprint(self.__label_to_edge[teste])
+
+        fixed_edge = self.__label_to_edge[edgeName]
+
+
         pass
 
-    def binaryConstraintCreator(self):
+    def binaryConstraintCreator(self, edgeName, position):
+
         pass
