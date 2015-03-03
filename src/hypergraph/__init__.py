@@ -511,6 +511,7 @@ class Hypergraph(object):
 
         pass
 
+    #creates the multiple probability matrixes for the non-homogeneous model
     def pachetWeightsSetter(self, playlistLength):
         self.pachetWeights = []
         for i in xrange(playlistLength):
@@ -518,11 +519,16 @@ class Hypergraph(object):
             pass
         pass
 
-    def generateZeroes(self, length):
-
+    #used to zero a probability matrix as it is needed for unary constraints
+    def generateZeroes(self, position_in_list):
+        for prob in self.pachetWeights[position_in_list]:
+            prob = 0
+            pass
+        #just to test if the zerous are ok
+        pprint.pprint(self.pachetWeights[position_in_list])
         return
 
-    def unaryConstraintCreator(self, edgeName, position):
+    def unaryConstraintCreator(self, edgeName, position_in_list):
 
         #consigo o nome do label
         #teste = self.__edge_to_label[45]
@@ -532,7 +538,8 @@ class Hypergraph(object):
         #consigo a posicao tendo o nome
         #pprint.pprint(self.__label_to_edge[teste])
 
-        fixed_edge = self.__label_to_edge[edgeName]
+        fixed_edge_position = self.__label_to_edge[edgeName]
+        generateZerous(position_in_list)
 
 
         pass
