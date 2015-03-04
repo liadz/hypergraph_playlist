@@ -515,7 +515,9 @@ class Hypergraph(object):
     def pachetWeightsSetter(self, playlistLength):
         self.pachetWeights = []
         for i in xrange(playlistLength):
-            self.pachetWeights[i] = self.__weights
+            self.pachetWeights.append(self.__weights)
+            pprint.pprint('Probabilidades para musica ' + str(i+1))
+            pprint.pprint(self.pachetWeights[i])
             pass
         pass
 
@@ -539,7 +541,7 @@ class Hypergraph(object):
         #pprint.pprint(self.__label_to_edge[teste])
 
         fixed_edge_position = self.__label_to_edge[edgeName]
-        generateZerous(position_in_list)
+        self.generateZeroes(position_in_list)
 
 
         pass

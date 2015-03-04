@@ -28,7 +28,7 @@ def printPlaylist(P, songs):
 def samplePlaylist(G, N, songs):
     (playlist, tagindex) = G.sample(N)
 
-    G.unaryConstraintCreator()
+    #G.unaryConstraintCreator()
     
     for (song_id, tag) in zip(playlist, tagindex):
         print '[%30s] %s' % (G.getEdgeLabel(tag), songs[song_id])
@@ -45,4 +45,7 @@ if __name__ == '__main__':
     G.setWeights({'__UNIFORM': 1e-12})
 
     samplePlaylist(G, N, songs)
+
+    G.pachetWeightsSetter(N)
+
     pass
