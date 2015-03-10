@@ -13,20 +13,20 @@ import numpy.random
 import re
 import pprint
 
+
 class Hypergraph(object):
-
     def __init__(self):
-        self.__vertex_to_edge   = dict()
-        self.__edge_set         = []
-        self.__edge_to_label    = []
-        self.__label_to_edge    = dict()
-        self.__weights          = []
-        self.__edge_size        = None
-        self.__Z0               = None
-        self.__Zt               = None
+        self.__vertex_to_edge = dict()
+        self.__edge_set = []
+        self.__edge_to_label = []
+        self.__label_to_edge = dict()
+        self.__weights = []
+        self.__edge_size = None
+        self.__Z0 = None
+        self.__Zt = None
 
-        #My variables:
-        self.pachetWeights      = []
+        # My variables:
+        self.pachetWeights = []
 
         pass
 
@@ -34,8 +34,8 @@ class Hypergraph(object):
         '''
             edgeMap is a dict: vertex -> collection of edge labels
         '''
-        
-        #updates __weights list.
+
+        # updates __weights list.
         self.__weights = list(self.__weights)
         '''
             it gets each vertex here for the given feature (edge)
@@ -73,11 +73,11 @@ class Hypergraph(object):
         # Compute set sizes for normalization
         self.__edge_size = map(len, self.__edge_set)
         # Uniform weights over all songs in an edge
-        self.__Z0       = numpy.array(self.__edge_size)
+        self.__Z0 = numpy.array(self.__edge_size)
         # Uniform over all but one song in an edge
-        self.__Zt       = numpy.array(self.__edge_size) - 1.0
+        self.__Zt = numpy.array(self.__edge_size) - 1.0
 
-        self.__weights  = numpy.array(self.__weights)
+        self.__weights = numpy.array(self.__weights)
         pass
 
     def pruneEdges(self, MIN_SIZE=128):
@@ -90,15 +90,15 @@ class Hypergraph(object):
 
         for (e, s) in enumerate(self.__edge_size):
             if s >= MIN_SIZE:
-                retained_edges.append( (s, e) )
+                retained_edges.append((s, e))
                 pass
             pass
 
         retained_edges.sort(reverse=True)
-        
+
         # Backup old data
-        old_edge_set        = self.__edge_set
-        old_edge_to_label   = self.__edge_to_label
+        old_edge_set = self.__edge_set
+        old_edge_to_label = self.__edge_to_label
 
         # re-initialize
         self.__init__()
@@ -122,19 +122,19 @@ class Hypergraph(object):
 
         for (e, s) in enumerate(self.__edge_to_label):
             if not R.match(s):
-                retained_edges.append( (e, s) )
+                retained_edges.append((e, s))
                 pass
             pass
 
         retained_edges.sort()
 
-        old_edge_set        = self.__edge_set
-        old_edge_to_label   = self.__edge_to_label
+        old_edge_set = self.__edge_set
+        old_edge_to_label = self.__edge_to_label
 
         # re-initialize
         self.__init__()
 
-        for (e,s) in retained_edges:
+        for (e, s) in retained_edges:
             for x in old_edge_set[e]:
                 self.importEdge({x: [old_edge_to_label[e]]})
                 pass
@@ -155,15 +155,15 @@ class Hypergraph(object):
         pass
 
     def playlistToMarkov(self, P):
-        nStates     = len(self.__weights)
-        nPlaylists  = len(P)
-        nTrans      = sum(map(len, P)) - nPlaylists
+        nStates = len(self.__weights)
+        nPlaylists = len(P)
+        nTrans = sum(map(len, P)) - nPlaylists
 
-        X0  = scipy.sparse.lil_matrix(  (nPlaylists,    nStates)    )
-        Xt  = scipy.sparse.lil_matrix(  (nTrans,        nStates)    )
-        Xp  = scipy.sparse.lil_matrix(  (nTrans,        nStates)    )
+        X0 = scipy.sparse.lil_matrix((nPlaylists, nStates))
+        Xt = scipy.sparse.lil_matrix((nTrans, nStates))
+        Xp = scipy.sparse.lil_matrix((nTrans, nStates))
 
-        r   = 0
+        r = 0
         for pi in xrange(nPlaylists):
             # Initial state vector
             for enum in self.__vertex_to_edge[P[pi][0]]:
@@ -172,8 +172,8 @@ class Hypergraph(object):
             pass
 
             for t in xrange(len(P[pi]) - 1):
-                edgePrev    = self.__vertex_to_edge[P[pi][t]]
-                edgeCur     = self.__vertex_to_edge[P[pi][t+1]]
+                edgePrev = self.__vertex_to_edge[P[pi][t]]
+                edgeCur = self.__vertex_to_edge[P[pi][t + 1]]
                 for enum in edgePrev:
                     Xp[r, enum] = 1.0
                     pass
@@ -183,21 +183,21 @@ class Hypergraph(object):
                 r += 1
                 pass
             pass
-        X0  = X0.tocsr()
-        Xt  = Xt.tocsr()
-        Xp  = Xp.tocsr()
+        X0 = X0.tocsr()
+        Xt = Xt.tocsr()
+        Xp = Xp.tocsr()
 
         return (X0, Xt, Xp)
 
     def playlistToStateless(self, P):
-        nStates     = len(self.__weights)
-        nPlaylists  = len(P)
-        nSongs      = sum(map(len, P))
+        nStates = len(self.__weights)
+        nPlaylists = len(P)
+        nSongs = sum(map(len, P))
 
-        X0          = scipy.sparse.lil_matrix( (nSongs,    nStates)    )
-        Xt          = []
-        Xp          = []
-        r           = 0
+        X0 = scipy.sparse.lil_matrix((nSongs, nStates))
+        Xt = []
+        Xp = []
+        r = 0
 
         for pi in xrange(nPlaylists):
             for t in xrange(len(P[pi])):
@@ -207,7 +207,7 @@ class Hypergraph(object):
                 r += 1
                 pass
             pass
-        X0  = X0.tocsr()
+        X0 = X0.tocsr()
         return (X0, Xt, Xp)
 
     def learn(self, P, lam=1, a=1, DEBUG=-1, MARKOV=True, m=30, val=0.10, initialWeights=None, transOnly=False):
@@ -222,7 +222,7 @@ class Hypergraph(object):
             DEBUG:  show training output (default: -1)
         '''
 
-        MIN_WEIGHT  =   1e-15
+        MIN_WEIGHT = 1e-15
 
         if isinstance(lam, float) and lam < 0:
             raise ValueError('Rate parameter (lam) must be a non-negative scalar')
@@ -231,17 +231,17 @@ class Hypergraph(object):
 
         def __ll_markov(w, X0, Xt, Xp, lam, a):
             # CREATED:2012-03-26 17:43:33 by Brian McFee <bmcfee@cs.ucsd.edu>
-            #   inputs X0 Xt Xp are now sparse matrices
+            # inputs X0 Xt Xp are now sparse matrices
 
-            ones        =   numpy.ones_like(w)
-            nlists      =   X0.shape[0]
-            ntrans      =   Xt.shape[0]
-            d           =   len(w)
+            ones = numpy.ones_like(w)
+            nlists = X0.shape[0]
+            ntrans = Xt.shape[0]
+            d = len(w)
 
-            f           =   numpy.sum(lam * w       - (a-1.0) * numpy.log(w))
-            g           =   lam * ones              - (a-1.0) / w
+            f = numpy.sum(lam * w - (a - 1.0) * numpy.log(w))
+            g = lam * ones - (a - 1.0) / w
 
-            weightSum   =   numpy.sum(w)
+            weightSum = numpy.sum(w)
 
             # Initial state likelihood
             #   P(x0 | w)           = sum_e P(x0 | e) P(e | w)
@@ -249,60 +249,60 @@ class Hypergraph(object):
             #   grad[-log P(x0|w)]  = - [x0 in e] * Z0 * w_e /(sum_f [x0 in f] * w_f * Z0) + w_e / sum(w_f)
 
             if not transOnly:
-                f           += nlists * numpy.log(weightSum)
-                g           += nlists * ones / weightSum
+                f += nlists * numpy.log(weightSum)
+                g += nlists * ones / weightSum
 
-                X0w         =   X0 * w
-                f           += -numpy.sum(numpy.log(X0w))
+                X0w = X0 * w
+                f += -numpy.sum(numpy.log(X0w))
 
-                g           +=  -((1.0/X0w).T * X0)
+                g += -((1.0 / X0w).T * X0)
                 pass
 
             # Transition likelihoods
             #   P(x1 | x0, w)           = sum_e P(x1 | e, x0) P(e | x0, w)
             #   -log P(x1 | x0, w)      = -log sum_e [x1 in e] * [x0 in e] * Zt * w_e  + log sum_e [x0 in e] w_e
             #   grad[-log P(x1|x0,w)]   = -[x1 in e] * [x0 in e] * Zt * w_e / sum(prev) + [x0 in e] * w_e / sum(prev)
-            Xtw         =   Xt * w
-            Xpw         =   Xp * w
-            f           +=  numpy.sum(numpy.log(Xpw)  -     numpy.log(Xtw))
+            Xtw = Xt * w
+            Xpw = Xp * w
+            f += numpy.sum(numpy.log(Xpw) - numpy.log(Xtw))
 
-            g           +=  (1.0/Xpw).T * Xp - (1.0/Xtw).T * Xt
+            g += (1.0 / Xpw).T * Xp - (1.0 / Xtw).T * Xt
 
             return (f, g)
 
         def __ll_stateless(w, X0, Xt, Xp, lam, a):
-            ones        =   numpy.ones_like(w)
-            nsongs      =   X0.shape[0]
+            ones = numpy.ones_like(w)
+            nsongs = X0.shape[0]
 
             # Initial state likelihood
-            #   P(x0 | w)           = sum_e P(x0 | e) P(e | w)
+            # P(x0 | w)           = sum_e P(x0 | e) P(e | w)
             #   -log P(x0 | w)      = - log sum_e [x0 in e] * Z0 * w_e  + log sum(w_e)
             #   grad[-log P(x0|w)]  = - [x0 in e] * Z0 * w_e /(sum_f [x0 in f] * w_f * Z0) + w_e / sum(w_f)
 
-            f           =   numpy.sum(lam * w       - (a-1.0) * numpy.log(w))
-            g           =   lam * ones              - (a-1.0) / w
+            f = numpy.sum(lam * w - (a - 1.0) * numpy.log(w))
+            g = lam * ones - (a - 1.0) / w
 
-            weightSum   =   numpy.sum(w)
+            weightSum = numpy.sum(w)
 
-            f           +=  nsongs * numpy.log(weightSum)
-            g           +=  nsongs * ones / weightSum
+            f += nsongs * numpy.log(weightSum)
+            g += nsongs * ones / weightSum
 
-            X0w         =   X0 * w
-            f           += -numpy.sum(numpy.log(X0w))
+            X0w = X0 * w
+            f += -numpy.sum(numpy.log(X0w))
 
-            g           += -(1.0/X0w).T * X0
+            g += -(1.0 / X0w).T * X0
             return (f, g)
 
 
-        bounds              = [(MIN_WEIGHT, None)] * len(self.__weights)
+        bounds = [(MIN_WEIGHT, None)] * len(self.__weights)
 
         # Pre-compute feature vectors
         if MARKOV:
-            obj         = __ll_markov
-            plprocess   = self.playlistToMarkov
+            obj = __ll_markov
+            plprocess = self.playlistToMarkov
         else:
-            obj         = __ll_stateless
-            plprocess   = self.playlistToStateless
+            obj = __ll_stateless
+            plprocess = self.playlistToStateless
             pass
 
         if initialWeights is not None:
@@ -313,41 +313,40 @@ class Hypergraph(object):
             pass
 
         # Carve into train and validation
-        nVal    = int(numpy.floor(val * len(P)))
-        Pval    = P[:nVal]
-        Ptrain  = P[nVal:]
+        nVal = int(numpy.floor(val * len(P)))
+        Pval = P[:nVal]
+        Ptrain = P[nVal:]
 
-        (X0, Xt, Xp)        = plprocess(Ptrain)
-
+        (X0, Xt, Xp) = plprocess(Ptrain)
 
         if not isinstance(lam, list):
             lam = [lam]
             pass
 
-        BEST_SCORE      = -numpy.inf
-        BEST_LAM        = None
+        BEST_SCORE = -numpy.inf
+        BEST_LAM = None
 
         for l in lam:
-            w, f, d = scipy.optimize.fmin_l_bfgs_b(     func    =   obj,
-                                                        x0      =   w0,
-                                                        args    =   (X0, Xt, Xp, l, a),
-                                                        fprime  =   None,
-                                                        bounds  =   bounds,
-                                                        m       =   m,
-                                                        factr   =   1e7,
-                                                        iprint  =   DEBUG)
+            w, f, d = scipy.optimize.fmin_l_bfgs_b(func=obj,
+                                                   x0=w0,
+                                                   args=(X0, Xt, Xp, l, a),
+                                                   fprime=None,
+                                                   bounds=bounds,
+                                                   m=m,
+                                                   factr=1e7,
+                                                   iprint=DEBUG)
 
-            self.__weights  = w
-            self.__weights  /= numpy.sum(self.__weights)
+            self.__weights = w
+            self.__weights /= numpy.sum(self.__weights)
             if val > 0:
                 score = self.avglikelihood(Pval)
             else:
                 score = self.avglikelihood(Ptrain)
                 pass
             if score > BEST_SCORE:
-                BEST_SCORE      = score
-                BEST_LAM        = l
-                w0              = self.__weights
+                BEST_SCORE = score
+                BEST_LAM = l
+                w0 = self.__weights
                 pass
             pass
 
@@ -361,23 +360,23 @@ class Hypergraph(object):
             Compute the log-likelihood of a playlist segment
             Output is normalized by length
         '''
-        
-        x0      = self.__makeVec(plist[0])
+
+        x0 = self.__makeVec(plist[0])
         # Update f
-        xzw     = x0 * self.__weights / self.__Z0
-        sxzw    = numpy.sum(xzw)
-        ll      = numpy.log(sxzw) - numpy.log(numpy.sum(self.__weights))
+        xzw = x0 * self.__weights / self.__Z0
+        sxzw = numpy.sum(xzw)
+        ll = numpy.log(sxzw) - numpy.log(numpy.sum(self.__weights))
         for next_song in plist[1:]:
-            x1      = self.__makeVec(next_song)
+            x1 = self.__makeVec(next_song)
 
-            x0w     = x0 * self.__weights
-            x01zw   = x0w * x1 / self.__Zt 
+            x0w = x0 * self.__weights
+            x01zw = x0w * x1 / self.__Zt
 
-            sx01zw  = numpy.sum(x01zw)
-            sx0w    = numpy.sum(x0w)
+            sx01zw = numpy.sum(x01zw)
+            sx0w = numpy.sum(x0w)
 
             # Update f
-            ll      += numpy.log(sx01zw)   - numpy.log(sx0w)
+            ll += numpy.log(sx01zw) - numpy.log(sx0w)
             pass
 
         ll /= len(plist)
@@ -388,14 +387,14 @@ class Hypergraph(object):
             Compute the stateless log-likelihood of a playlist segment
             Output is normalized by length
         '''
-        
+
         ll = 0
         for x in plist:
-            x0      = self.__makeVec(x)
+            x0 = self.__makeVec(x)
             # Update f
-            xzw     = x0 * self.__weights / self.__Z0
-            sxzw    = numpy.sum(xzw)
-            ll      += numpy.log(sxzw) - numpy.log(numpy.sum(self.__weights))
+            xzw = x0 * self.__weights / self.__Z0
+            sxzw = numpy.sum(xzw)
+            ll += numpy.log(sxzw) - numpy.log(numpy.sum(self.__weights))
 
         ll /= len(plist)
         return ll
@@ -422,17 +421,17 @@ class Hypergraph(object):
             for each pair E1, E2
                 add edge E1*E2 <=> min(|E1|, |E2|) * rho > |E1*E2| >= MIN_SIZE
         '''
-        Q   = {}
+        Q = {}
         for e1 in range(len(self.__edge_set)):
             se1 = self.__edge_size[e1]
             if se1 * rho < MIN_SIZE:
                 continue
-            for e2 in range(e1+1, len(self.__edge_set)):
+            for e2 in range(e1 + 1, len(self.__edge_set)):
                 se2 = self.__edge_size[e2]
                 if se2 * rho < MIN_SIZE:
                     continue
-                newlabel    = self.__edge_to_label[e1] + '-&-' + self.__edge_to_label[e2]
-                newedge     = self.__edge_set[e1] & self.__edge_set[e2]
+                newlabel = self.__edge_to_label[e1] + '-&-' + self.__edge_to_label[e2]
+                newedge = self.__edge_set[e1] & self.__edge_set[e2]
 
                 # First check to make sure we're shrinking
                 # Second check to make sure the result is big enough
@@ -481,22 +480,22 @@ class Hypergraph(object):
         Sample a length-m playlist from the model
         '''
 
-        #Aqui comeca a magia: pegando os edges com maiores pesos para escolher a seed da playlist.
+        # Aqui comeca a magia: pegando os edges com maiores pesos para escolher a seed da playlist.
         def __categoricalSample(p):
             return numpy.argmax(numpy.random.multinomial(1, p))
 
         # Sample an intial edge set
-        edges   = [__categoricalSample(self.__weights)]
+        edges = [__categoricalSample(self.__weights)]
 
         # Sample a song from the edge
-        songs   = random.sample(self.__edge_set[edges[-1]], 1)
+        songs = random.sample(self.__edge_set[edges[-1]], 1)
 
         #segue-se pegando os edges mais importantes dentro dos alcancaveis para poder escolher a proxima musica.
 
         for i in range(m):
-            x0      = self.__makeVec(songs[-1])
-            x0w     = x0 * self.__weights
-            x0w     /= numpy.sum(x0w)
+            x0 = self.__makeVec(songs[-1])
+            x0w = x0 * self.__weights
+            x0w /= numpy.sum(x0w)
 
             # Sample the next edge
             edges.append(__categoricalSample(x0w))
@@ -506,31 +505,28 @@ class Hypergraph(object):
 
         return (songs, edges)
 
-    def betaSampler(self, m=10):
 
-
-        pass
-
-    #creates the multiple probability matrixes for the non-homogeneous model
+    # creates the multiple probability matrixes for the non-homogeneous model
     def pachetWeightsSetter(self, playlistLength):
         self.pachetWeights = []
         for i in xrange(playlistLength):
             self.pachetWeights.append(self.__weights)
-            pprint.pprint('Probabilidades para musica ' + str(i+1))
-            pprint.pprint(self.pachetWeights[i])
+            #pprint.pprint('Probabilidades para musica ' + str(i+1))
+            #pprint.pprint(self.pachetWeights[i])
             pass
         pass
 
     #used to zero a probability matrix as it is needed for unary constraints
     def generateZeroes(self, position_in_list):
-        for prob in self.pachetWeights[position_in_list]:
-            prob = 0
-            pass
+        #for prob in self.pachetWeights[position_in_list]:
+        #    prob = 0
+        #    pass
+        self.pachetWeights[position_in_list] = [0 for prob in self.pachetWeights[position_in_list]]
         #just to test if the zerous are ok
-        pprint.pprint(self.pachetWeights[position_in_list])
-        return
+        #pprint.pprint(self.pachetWeights[position_in_list])
+        pass
 
-    def unaryConstraintCreator(self, edgeName, position_in_list):
+    def unaryConstraintCreator(self, edge_name, position_in_list):
 
         #consigo o nome do label
         #teste = self.__edge_to_label[45]
@@ -540,12 +536,41 @@ class Hypergraph(object):
         #consigo a posicao tendo o nome
         #pprint.pprint(self.__label_to_edge[teste])
 
-        fixed_edge_position = self.__label_to_edge[edgeName]
+        fixed_edge_position = self.__label_to_edge[edge_name]
         self.generateZeroes(position_in_list)
-
+        self.pachetWeights[position_in_list][fixed_edge_position] = 1
+        pprint.pprint(self.pachetWeights[position_in_list])
 
         pass
 
     def binaryConstraintCreator(self, edgeName, position):
 
         pass
+
+    #for now its almost the same sampler
+    def pachet_sample(self, m=10):
+
+        # Aqui comeca a magia: pegando os edges com maiores pesos para escolher a seed da playlist.
+        def __categoricalSample(p):
+            return numpy.argmax(numpy.random.multinomial(1, p))
+
+        # Sample an intial edge set
+        edges = [__categoricalSample(self.pachetWeights[0])]
+
+        # Sample a song from the edge
+        songs = random.sample(self.__edge_set[edges[-1]], 1)
+
+        #segue-se pegando os edges mais importantes dentro dos alcancaveis para poder escolher a proxima musica.
+
+        for i in range(m):
+            x0 = self.__makeVec(songs[-1])
+            x0w = x0 * self.pachetWeights[i]
+            x0w /= numpy.sum(x0w)
+
+            # Sample the next edge
+            edges.append(__categoricalSample(x0w))
+            # Sample the next song
+            songs.extend(random.sample(self.__edge_set[edges[-1]] - set([songs[-1]]), 1))
+            pass
+
+        return (songs, edges)
