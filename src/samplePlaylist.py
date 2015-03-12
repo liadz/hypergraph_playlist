@@ -26,7 +26,8 @@ def printPlaylist(P, songs):
 
 
 def samplePlaylist(G, N, songs):
-    (playlist, tagindex) = G.pachet_sample(N)
+    #(playlist, tagindex) = G.pachet_sample(N)
+    (playlist, tagindex) = G.sample(N)
 
     #G.unaryConstraintCreator()
     

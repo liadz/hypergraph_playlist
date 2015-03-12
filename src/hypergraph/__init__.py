@@ -37,6 +37,7 @@ class Hypergraph(object):
 
         # updates __weights list.
         self.__weights = list(self.__weights)
+
         '''
             it gets each vertex here for the given feature (edge)
             each feature can put a song (vertex) in many edges, just remember how epoch is calculated
@@ -496,6 +497,11 @@ class Hypergraph(object):
             x0 = self.__makeVec(songs[-1])
             x0w = x0 * self.__weights
             x0w /= numpy.sum(x0w)
+
+            pprint.pprint('size weights: ' + str(self.__weights.__len__()))
+            pprint.pprint('size label to edge: ' + str(self.__label_to_edge.__len__()))
+            pprint.pprint('size edge to label: ' + str(self.__edge_to_label.__len__()))
+            pprint.pprint('size edge set: ' + str(self.__edge_set.__len__()))
 
             # Sample the next edge
             edges.append(__categoricalSample(x0w))
