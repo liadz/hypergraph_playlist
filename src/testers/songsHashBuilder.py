@@ -26,3 +26,4 @@ with open(UNIQUE_TRACKS_PATH, "r") as tracks:
         songInfo = splot[2] + " - " + splot[3]
         songHashDic[splot[1]] = songInfo
     pickle.dump(songHashDic, open("songhash.pickle", "wb"))
+    pass
