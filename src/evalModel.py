@@ -120,8 +120,10 @@ def evaluateModel(params):
 
     # Reset edge weights
     G.unlearn()
+    print 'toba!!!!'
 
     for (P, name) in getFiles(params, 'train'):
+        print 'foiba!!!!'
         nFolds  = len(P)
         print 'Training on %20s... ' % name,
         weights[name]   = [None] * nFolds
@@ -142,6 +144,7 @@ def evaluateModel(params):
         pass
 
     for (P, name) in getFiles(params, 'test'):
+        print 'boga!!!!'
         nFolds  = len(P)
         K = list(set(['ALL', name]))
         K.sort()
@@ -157,6 +160,8 @@ def evaluateModel(params):
             pass
         pass
 
+    print 'biloica!!!!'
+
     results = {'weights': weights, 'scores': scores, 'params': params}
     return results
 
@@ -164,6 +169,7 @@ def evaluateModel(params):
 if __name__ == '__main__':
     params  = processArguments()
     results = evaluateModel(params)
+    print 'cabando!'
     with open(params['results_out'][0], 'wb') as f:
         pickle.dump(results, f)
         pass
