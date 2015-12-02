@@ -15,6 +15,7 @@ import sys
 import pprint
 import hypergraph
 
+
 def printPlaylist(P, songs):
     for (i, p) in enumerate(P):
         print '%2d. %s' % (i, songs[p])
@@ -26,14 +27,31 @@ def printPlaylist(P, songs):
 
 
 def samplePlaylist(G, N, songs):
-    #(playlist, tagindex) = G.pachet_sample(N)
+    # (playlist, tagindex) = G.pachet_sample(N)
     (playlist, tagindex) = G.sample(N)
 
-    #G.unaryConstraintCreator()
-    
+    # G.unaryConstraintCreator()
+
     for (song_id, tag) in zip(playlist, tagindex):
         print '[%30s] %s' % (G.getEdgeLabel(tag), songs[song_id])
     pass
+
+
+# I used this to decide which dialect I would use in my research by taking a general look at many playlists
+def sampleManyPlaylists(G, N, songs, playlistQuantity):
+    with open('dialectEvaluationList.txt', 'a') as deList:
+        for i in range(playlistQuantity):
+            (playlist, tagindex) = G.sample(N)
+
+            deList.write('Playlist')
+
+            for (song_id, tag) in zip(playlist, tagindex):
+                deList.write('[%30s] %s' % (G.getEdgeLabel(tag), songs[song_id]))
+            pass
+
+        pass
+    pass
+
 
 if __name__ == '__main__':
     with open(sys.argv[1], 'r') as f:
@@ -45,13 +63,11 @@ if __name__ == '__main__':
 
     G.setWeights({'__UNIFORM': 1e-12})
 
-    G.pachetWeightsSetter(N)
-    G.unaryConstraintCreator('rock', 7)
-    #G.unaryConstraintCreator('electronic', 8)
-    G.unaryConstraintCreator('alternative', 9)
+    # G.pachetWeightsSetter(N)
+    # G.unaryConstraintCreator('rock', 7)
+    # G.unaryConstraintCreator('electronic', 8)
+    # G.unaryConstraintCreator('alternative', 9)
 
     samplePlaylist(G, N, songs)
-
-
 
     pass
