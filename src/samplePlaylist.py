@@ -6,7 +6,10 @@ Generate a tag-hopper playlist
 
 Usage:
 
-./sampleTaghopper.py model.pickle songhash.pickle N 
+./sampleTaghopper.py model.pickle songhash.pickle N
+
+for multi sampling:
+./samplePlaylist my_trained_list.pickle songhash.pickle N
 
 '''
 
@@ -15,6 +18,7 @@ import sys
 import pprint
 import hypergraph
 
+PLAYLIST_PER_DIALECT = 3
 
 def printPlaylist(P, songs):
     for (i, p) in enumerate(P):
@@ -38,22 +42,35 @@ def samplePlaylist(G, N, songs):
 
 
 # I used this to decide which dialect I would use in my research by taking a general look at many playlists
-def sampleManyPlaylists(G, N, songs, playlistQuantity):
-    with open('dialectEvaluationList.txt', 'a') as deList:
-        for i in range(playlistQuantity):
-            (playlist, tagindex) = G.sample(N)
+def sampleManyPlaylists(hypergraphList, N, songs, playlistQuantity):
+    with open('dialectEvaluationList.txt', 'wb') as deList:
+        count = 1
+        for key, hg in hypergraphList.iteritems():
+            hg.setWeights({'__UNIFORM': 1e-12})
+            deList.write("Dialect: " + key + "\n")
+            print "Vai, Safadaum!" + str(count)
+            count+=1
+            for i in range(playlistQuantity):
+                print str(i)
+                (playlist, tagindex) = hg.sample(N)
 
-            deList.write('Playlist')
+                deList.write("Playlist " + str(i+1) + "\n")
 
-            for (song_id, tag) in zip(playlist, tagindex):
-                deList.write('[%30s] %s' % (G.getEdgeLabel(tag), songs[song_id]))
+                for (song_id, tag) in zip(playlist, tagindex):
+                    #deList.write(u"[%30s] %s".format(hg.getEdgeLabel(tag), songs[song_id]))
+                    songItem = '[' + hg.getEdgeLabel(tag) + '] ' + songs[song_id].decode("ascii", "ignore")
+                    deList.write(songItem)
+                    pass
+                deList.write("\n")
+                pass
+            deList.write("\n")
             pass
-
+        deList.write("\n")
         pass
     pass
 
 
-if __name__ == '__main__':
+"""if __name__ == '__main__':
     with open(sys.argv[1], 'r') as f:
         jsd = pickle.load(f)
         G = jsd['G']
@@ -70,4 +87,19 @@ if __name__ == '__main__':
 
     samplePlaylist(G, N, songs)
 
+    pass"""
+
+if __name__ == '__main__':
+    with open(sys.argv[1], 'rb') as f:
+        hypergraphsList = pickle.load(f)
+    with open(sys.argv[2], 'r') as f:
+        songs = pickle.load(f)
+    nSongsPlaylist = int(sys.argv[3]) - 1
+
+    #print hypergraphsList
+
+    sampleManyPlaylists(hypergraphsList, nSongsPlaylist, songs, PLAYLIST_PER_DIALECT)
+
+    print 'Canxa!'
     pass
+

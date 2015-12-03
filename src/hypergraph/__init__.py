@@ -498,10 +498,10 @@ class Hypergraph(object):
             x0w = x0 * self.__weights
             x0w /= numpy.sum(x0w)
 
-            pprint.pprint('size weights: ' + str(self.__weights.__len__()))
+            """pprint.pprint('size weights: ' + str(self.__weights.__len__()))
             pprint.pprint('size label to edge: ' + str(self.__label_to_edge.__len__()))
             pprint.pprint('size edge to label: ' + str(self.__edge_to_label.__len__()))
-            pprint.pprint('size edge set: ' + str(self.__edge_set.__len__()))
+            pprint.pprint('size edge set: ' + str(self.__edge_set.__len__()))"""
 
             # Sample the next edge
             edges.append(__categoricalSample(x0w))

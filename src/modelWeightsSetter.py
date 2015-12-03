@@ -13,6 +13,10 @@ DIALECT_LIST = ['Narrative', 'Single Artist', 'Theme', 'Dance-House', 'Jazz', 'H
                 'Cover', 'Punk', 'Rock', 'Mixed', 'ALL', 'Indie', 'Alternating DJ', 'Sleep', 'Folk', 'Blues',
                 'Depression']
 
+USED_DIALECTS = ['Single Artist', 'Theme', 'Dance-House', 'Hip Hop', 'Rock-Pop',
+                'Rhythm and Blues', 'Electronic Music', 'Road Trip',
+                'Cover', 'Rock', 'Mixed', 'Indie', 'Alternating DJ', 'Folk']
+
 if __name__ == "__main__":
     graphList = {}
 
@@ -24,7 +28,7 @@ if __name__ == "__main__":
         graph = pickle.load(mm)['G']
         pass
 
-    for dialect in DIALECT_LIST:
+    for dialect in USED_DIALECTS:
         trainedWeights = output['weights'][dialect][0]
 
         graph.setWeights(trainedWeights)
