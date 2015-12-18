@@ -1,7 +1,7 @@
 
 import cPickle as pickle
 import hypergraph
-import pprint
+import pprinto
 
 __author__ = 'vitor'
 

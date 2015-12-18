@@ -90,7 +90,7 @@ def sampleManyPlaylists(hypergraphList, N, songs, playlistQuantity):
     pass"""
 
 if __name__ == '__main__':
-    with open(sys.argv[1], 'rb') as f:
+    with open(sys.argv[1], 'r') as f:
         hypergraphsList = pickle.load(f)
     with open(sys.argv[2], 'r') as f:
         songs = pickle.load(f)
